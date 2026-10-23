@@ -1,0 +1,114 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#111827">
+  <title>EdgeCase AI — Code Analysis</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <aside class="sidebar">
+    <h2 class="brand">EdgeCase <span>AI</span></h2>
+
+    <nav>
+      <a class="active" href="#home">⌂ Home</a>
+      <a href="#analyze">⇧ Analyze</a>
+      <a href="#results">▤ Results</a>
+    </nav>
+
+    <div class="sidebar-note">
+      Find the cases developers might miss.
+    </div>
+  </aside>
+
+  <main class="main-content" id="home">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">AI-POWERED CODE REVIEW</p>
+        <h1>Find the edge cases <span>before they find you.</span></h1>
+        <p class="subtitle">
+          Analyze your source code and discover potential logical gaps.
+        </p>
+      </div>
+      <div class="status-pill"><span></span> Analysis workspace</div>
+    </header>
+
+    <section class="upload-section" id="analyze">
+      <h2>Start a new analysis</h2>
+      <p class="muted">Choose any one input method.</p>
+
+      <div class="input-grid">
+        <article class="input-card">
+          <div class="card-icon">ZIP</div>
+          <h3>Upload project</h3>
+          <p>Analyze a complete project archive.</p>
+
+          <label class="file-picker" for="zipFile">
+            Choose ZIP file
+          </label>
+          <input id="zipFile" type="file" accept=".zip">
+          <p class="file-name" id="zipName">No file selected</p>
+        </article>
+
+        <article class="input-card">
+          <div class="card-icon">CODE</div>
+          <h3>Individual files</h3>
+          <p>Select one or more source files.</p>
+
+          <label class="file-picker" for="sourceFiles">
+            Choose source files
+          </label>
+          <input
+            id="sourceFiles"
+            type="file"
+            multiple
+            accept=".py,.js,.jsx,.ts,.tsx,.java,.html,.css"
+          >
+          <p class="file-name" id="sourceNames">No files selected</p>
+        </article>
+
+        <article class="input-card">
+          <div class="card-icon">GH</div>
+          <h3>GitHub repository</h3>
+          <p>Analyze a public repository.</p>
+
+          <input
+            id="githubUrl"
+            type="url"
+            placeholder="https://github.com/user/repo"
+          >
+          <p class="file-name">Public repositories supported</p>
+        </article>
+      </div>
+
+      <div class="action-row">
+        <button id="analyzeButton" class="primary-button">
+          Analyze source code →
+        </button>
+        <p id="inputMessage" role="status"></p>
+      </div>
+    </section>
+
+    <section class="welcome-panel" id="results">
+      <div>
+        <p class="eyebrow">YOUR ANALYSIS REPORT</p>
+        <h2>Insights backed by code evidence.</h2>
+        <p class="muted">
+          Your findings, severity breakdown and recommendations
+          will appear here.
+        </p>
+      </div>
+      <div class="welcome-symbol">{ }</div>
+    </section>
+
+    <footer>
+      EdgeCase AI · Find the cases developers might miss.
+    </footer>
+  </main>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
+
