@@ -10,6 +10,7 @@ from fastapi import FastAPI, UploadFile, File, Form, HTTPException
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 
+from app.llm_analyzer import analyze_with_gemini
 BASE_DIR = Path(__file__).resolve().parent
 
 app = FastAPI(
@@ -583,5 +584,37 @@ async def analyze_project(
     else:
         sources = await fetch_github_sources(github_url.strip())
 
-    return build_report(sources)
+    report = build_report(sources)
+
+    # Optional Gemini review: static analysis remains available on failure.
+    ai_findings = analyze_with_gemini(sources)
+    existing_findings = report.get("findings", [])
+    existing_findings.extend(ai_findings)
+    report["findings"] = existing_findings
+
+    summary = report.get("summary", {})
+    summary["total"] = len(existing_findings)
+    summary["high"] = sum(
+        1 for item in existing_findings
+        if str(item.get("severity", "")).lower() == "high"
+    )
+    summary["medium"] = sum(
+        1 for item in existing_findings
+        if str(item.get("severity", "")).lower() == "medium"
+    )
+    summary["low"] = sum(
+        1 for item in existing_findings
+        if str(item.get("severity", "")).lower() == "low"
+    )
+    report["summary"] = summary
+
+    if ai_findings:
+        report["analysis_type"] = "hybrid_static_and_generative_ai"
+        report["ai_status"] = "completed"
+    elif __import__("os").getenv("GEMINI_API_KEY"):
+        report["ai_status"] = "unavailable_fallback"
+    else:
+        report["ai_status"] = "disabled_no_key"
+
+    return report
 
